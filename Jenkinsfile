@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment{
-        DOCKER_USERNAME = credentials('docker-username')
+        DOCKER_USERNAME = credentials('Docker-credentials')
         FRONTEND_IMAGE = "${DOCKER_USERNAME}/frontend"
         BACKEND_IMAGE = "${DOCKER_USERNAME}/backend"
         IMAGE_TAG = "${BUILD_NUMBER}"
