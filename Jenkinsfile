@@ -7,7 +7,7 @@ pipeline {
         BACKEND_IMAGE = "${DOCKER_USERNAME}/backend"
         IMAGE_TAG = "${BUILD_NUMBER}"
         SERVER_IP = credentials('WebApp-Server')
-        APP_SERVER = "ec2-user@SERVER_IP"
+        APP_SERVER = "ec2-user@${SERVER_IP"}
         }
 
 
@@ -15,7 +15,7 @@ pipeline {
 
         stage('checkout'){
             steps{
-                git branch: 'main'
+                git branch: 'main',
                 url: 'https://github.com/sureshArnold/WebApp.git'
             }
         }
@@ -45,8 +45,8 @@ pipeline {
             steps{
                 withCredentials([
                     usernamePassword(
-                        credentialsId:Docker-credentials
-                        usernameVariable:'DOCKER_USER'
+                        credentialsId:Docker-credentials,
+                        usernameVariable:'DOCKER_USER',
                         passwordVariable:'DOCKER_PASS'
                     )
                 ]){
@@ -69,7 +69,7 @@ pipeline {
                     bindings: [sshUserPrivateKey(credentialsId: 'Jenkins ssh key',keyFileVariable: 'SSH_KEY')]
                 ){
                     sh '''
-                    ssh -i SSH_KEY -o StrictHostKeyChecking=no $APP_SERVER << EOF
+                    ssh -i "SSH_KEY" -o StrictHostKeyChecking=no $APP_SERVER << EOF
 
                     docker pull $FRONTEND_IMAGE:$IMAGE_TAG
                     docker pull $BACKEND_IMAGE:$IMAGE_TAG
