@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment{
-        DOCKER_USERNAME = credentials('Docker-credentials')
-        FRONTEND_IMAGE = "${DOCKER_USERNAME}/frontend"
-        BACKEND_IMAGE = "${DOCKER_USERNAME}/backend"
+        
+        FRONTEND_IMAGE = "kanurisureshtheroy777@gmail.com/frontend"
+        BACKEND_IMAGE = "kanurisureshtheroy777@gmail.com/backend"
         IMAGE_TAG = "${BUILD_NUMBER}"
         SERVER_IP = credentials('WebApp-Server')
-        APP_SERVER = "ec2-user@${SERVER_IP"}
+        APP_SERVER = "ec2-user@${SERVER_IP}"
         }
 
 
-    Stages{
+    stages{
 
         stage('checkout'){
             steps{
@@ -45,13 +45,13 @@ pipeline {
             steps{
                 withCredentials([
                     usernamePassword(
-                        credentialsId:Docker-credentials,
+                        credentialsId:'Docker-credentials',
                         usernameVariable:'DOCKER_USER',
                         passwordVariable:'DOCKER_PASS'
                     )
                 ]){
                     sh '''
-                    echo "DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
                     docker push $FRONTEND_IMAGE:$IMAGE_TAG
                     docker push $BACKEND_IMAGE:$IMAGE_TAG
@@ -69,7 +69,7 @@ pipeline {
                     bindings: [sshUserPrivateKey(credentialsId: 'Jenkins ssh key',keyFileVariable: 'SSH_KEY')]
                 ){
                     sh '''
-                    ssh -i "SSH_KEY" -o StrictHostKeyChecking=no $APP_SERVER << EOF
+                    ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $APP_SERVER << EOF
 
                     docker pull $FRONTEND_IMAGE:$IMAGE_TAG
                     docker pull $BACKEND_IMAGE:$IMAGE_TAG
@@ -81,7 +81,7 @@ pipeline {
                     docker rm backend
 
                     docker run -p 80:80 -d --name frontend $FRONTEND_IMAGE:$IMAGE_TAG
-                    docker run -p 8080:8080 -d --name backend $BACKEND_IMAGE:$IMAGE_TAG
+                    docker run -p 3000:3000 -d --name backend $BACKEND_IMAGE:$IMAGE_TAG
                     EOF
                     '''
                 }
