@@ -2,7 +2,7 @@ FROM node:26 as build
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package-lock.json ./
 RUN npm ci
 
 # copies the rest of the project
