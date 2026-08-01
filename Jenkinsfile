@@ -65,11 +65,9 @@ pipeline {
 
         stage('Deploy to EC2'){
             steps{
-                withCredentials(
-                    bindings: [sshUserPrivateKey(credentialsId: 'Jenkins-ssh-key',keyFileVariable: 'SSH_KEY')]
-                ){
+               sshagent(['jenkins-ssh-key']) {
                     sh '''
-                    ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $APP_SERVER << EOF
+                    ssh -o StrictHostKeyChecking=no $APP_SERVER << EOF
 
                     docker pull $FRONTEND_IMAGE:$IMAGE_TAG
                     docker pull $BACKEND_IMAGE:$IMAGE_TAG
@@ -84,10 +82,9 @@ pipeline {
                     docker run -p 3000:3000 -d --name backend $BACKEND_IMAGE:$IMAGE_TAG
                     EOF
                     '''
-                }
+               }
             }
         }
-    }
 
     post{
         success{
