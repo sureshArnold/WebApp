@@ -3,8 +3,8 @@ pipeline {
 
     environment{
         
-        FRONTEND_IMAGE = "kanurisureshtheroy777@gmail.com/frontend"
-        BACKEND_IMAGE = "kanurisureshtheroy777@gmail.com/backend"
+        FRONTEND_IMAGE = "sureshkanuri/frontend"
+        BACKEND_IMAGE = "sureshkanuri/backend"
         IMAGE_TAG = "${BUILD_NUMBER}"
         SERVER_IP = credentials('WebApp-Server-IP')
         APP_SERVER = "ec2-user@${SERVER_IP}"
