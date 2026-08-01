@@ -6,7 +6,7 @@ pipeline {
         FRONTEND_IMAGE = "kanurisureshtheroy777@gmail.com/frontend"
         BACKEND_IMAGE = "kanurisureshtheroy777@gmail.com/backend"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        SERVER_IP = credentials('WebApp-Server')
+        SERVER_IP = credentials('WebApp-Server-IP')
         APP_SERVER = "ec2-user@${SERVER_IP}"
         }
 
@@ -66,7 +66,7 @@ pipeline {
         stage('Deploy to EC2'){
             steps{
                 withCredentials(
-                    bindings: [sshUserPrivateKey(credentialsId: 'Jenkins ssh key',keyFileVariable: 'SSH_KEY')]
+                    bindings: [sshUserPrivateKey(credentialsId: 'Jenkins-ssh-key',keyFileVariable: 'SSH_KEY')]
                 ){
                     sh '''
                     ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $APP_SERVER << EOF
