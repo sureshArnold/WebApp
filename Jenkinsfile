@@ -65,7 +65,7 @@ pipeline {
 
         stage('Deploy to EC2'){
             steps{
-               sshagent(credentials:['jenkins-ssh-key']) {
+               sshagent(credentials:['Jenkins-ssh-key']) {
                     sh '''
                     ssh -o StrictHostKeyChecking=no $APP_SERVER << EOF
 
