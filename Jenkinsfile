@@ -71,6 +71,9 @@ pipeline {
                     docker pull $FRONTEND_IMAGE:$IMAGE_TAG
                     docker pull $BACKEND_IMAGE:$IMAGE_TAG
 
+                    docker images $FRONTEND_IMAGE --format "{{.Repository}}:{{.Tag}}" | sort -V | head -n -2 | xargs -r docker rmi 
+                    docker images $BACKEND_IMAGE --format "{{.Repository}}:{{.Tag}}" | sort -V | head -n -2 | xargs -r docker rmi
+
                     docker stop frontend || true
                     docker rm frontend || true
 
