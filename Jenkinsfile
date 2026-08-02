@@ -67,8 +67,7 @@ pipeline {
             steps{
                sshagent(credentials:['Jenkins-ssh-key']) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no $APP_SERVER << EOF
-
+                    ssh -o StrictHostKeyChecking=no $APP_SERVER "
                     docker pull $FRONTEND_IMAGE:$IMAGE_TAG
                     docker pull $BACKEND_IMAGE:$IMAGE_TAG
 
@@ -80,7 +79,7 @@ pipeline {
 
                     docker run -p 80:80 -d --name frontend $FRONTEND_IMAGE:$IMAGE_TAG
                     docker run -p 3000:3000 -d --name backend $BACKEND_IMAGE:$IMAGE_TAG
-                    EOF
+                    "
                     '''
                }
             }
