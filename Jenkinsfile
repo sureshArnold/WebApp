@@ -73,10 +73,10 @@ pipeline {
                     docker pull $BACKEND_IMAGE:$IMAGE_TAG
 
                     docker stop frontend || true
-                    docker rm frontend
+                    docker rm frontend || true
 
                     docker stop backend || true
-                    docker rm backend
+                    docker rm backend || true
 
                     docker run -p 80:80 -d --name frontend $FRONTEND_IMAGE:$IMAGE_TAG
                     docker run -p 3000:3000 -d --name backend $BACKEND_IMAGE:$IMAGE_TAG
